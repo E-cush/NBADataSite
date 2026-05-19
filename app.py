@@ -10,7 +10,19 @@ def home():
 
     tables = {}
     simulation = None
-    nba_teams = []
+    # Default season
+    default_season = "2024-25"
+
+    stats = leaguedashteamstats.LeagueDashTeamStats(
+        season=default_season,
+        measure_type_detailed_defense='Advanced'
+    )
+
+    default_df = stats.get_data_frames()[0]
+
+    nba_teams = sorted(
+        default_df['TEAM_NAME'].unique().tolist()
+    )
 
     if request.method == "POST":
 
