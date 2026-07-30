@@ -5,24 +5,45 @@ import random
 
 app = Flask(__name__)
 
+NBA_TEAMS = [
+    "Atlanta Hawks",
+    "Boston Celtics",
+    "Brooklyn Nets",
+    "Charlotte Hornets",
+    "Chicago Bulls",
+    "Cleveland Cavaliers",
+    "Dallas Mavericks",
+    "Denver Nuggets",
+    "Detroit Pistons",
+    "Golden State Warriors",
+    "Houston Rockets",
+    "Indiana Pacers",
+    "LA Clippers",
+    "Los Angeles Lakers",
+    "Memphis Grizzlies",
+    "Miami Heat",
+    "Milwaukee Bucks",
+    "Minnesota Timberwolves",
+    "New Orleans Pelicans",
+    "New York Knicks",
+    "Oklahoma City Thunder",
+    "Orlando Magic",
+    "Philadelphia 76ers",
+    "Phoenix Suns",
+    "Portland Trail Blazers",
+    "Sacramento Kings",
+    "San Antonio Spurs",
+    "Toronto Raptors",
+    "Utah Jazz",
+    "Washington Wizards"
+]
+
 @app.route("/", methods=["GET", "POST"])
 def home():
 
     tables = {}
     simulation = None
-    # Default season
-    default_season = "2024-25"
-
-    stats = leaguedashteamstats.LeagueDashTeamStats(
-        season=default_season,
-        measure_type_detailed_defense='Advanced'
-    )
-
-    default_df = stats.get_data_frames()[0]
-
-    nba_teams = sorted(
-        default_df['TEAM_NAME'].unique().tolist()
-    )
+    nba_teams = NBA_TEAMS
 
     if request.method == "POST":
 
@@ -55,7 +76,8 @@ def home():
 
             return render_template(
                 "index.html",
-                error="Invalid season format."
+                error="Invalid season format.",
+                nba_teams=nba_teams
             )
 
         # =========================
@@ -69,9 +91,7 @@ def home():
 
         df = stats.get_data_frames()[0]
 
-        nba_teams = sorted(
-            df['TEAM_NAME'].unique().tolist()
-        )
+
 
         # =========================
         # ANALYTICS TABLES
